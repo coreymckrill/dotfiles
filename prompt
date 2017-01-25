@@ -1,0 +1,20 @@
+local_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Colors
+# http://it.toolbox.com/blogs/lim/how-to-fix-colors-on-mac-osx-terminal-37214
+# http://geoff.greer.fm/lscolors/
+export CLICOLOR=1
+export LSCOLORS=exfxcxdxbxegedabagacad
+
+# Includes
+[[ -s ${local_dir}/lib/git-prompt.sh ]] && source ${local_dir}/lib/git-prompt.sh
+
+# Git prompt settings
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWUPSTREAM="auto"
+GIT_PS1_SHOWCOLORHINTS=true
+GIT_PS1_HIDE_IF_PWD_IGNORED=true
+
+# Teh prompt
+export PROMPT_COMMAND='__git_ps1 "\n\w" "\n\u@\h > " "\n[%s]"'

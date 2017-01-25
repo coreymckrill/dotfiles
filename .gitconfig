@@ -1,0 +1,10 @@
+# Include for ~/.gitconfig
+
+[core]
+	excludesfile = ~/.local/.gitignore_global
+
+[alias]
+	stat = status --short
+
+[color]
+	ui = true
