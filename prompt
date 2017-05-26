@@ -73,5 +73,5 @@ function svn_prompt {
 
 # Teh prompt
 export PROMPT_COMMAND='__git_ps1 "\n${color_folder}\w${color_reset}" \
-	"$(svn_prompt)\n${color_user}\u${color_reset}@${color_user_host}\h${color_reset} > " \
+	"$(svn_prompt)\n${color_user}\u${color_reset}@${color_user_host}\H${color_reset} > " \
 	"\nGit: [%s]"'
