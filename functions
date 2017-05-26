@@ -1,0 +1,16 @@
+# !/bin/bash
+
+# Apply a Trac patch.
+function tracpatch() {
+	local vcs=${3:-"svn"}
+
+	case "$vcs" in
+		svn)
+			curl "$1?format=raw" | patch -p${2:-0}
+			;;
+
+		git)
+			curl "$1?format=raw" | git apply -p${2:-0}
+			;;
+	esac
+}

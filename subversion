@@ -1,0 +1,3 @@
+# !/bin/bash
+
+export SVN_EDITOR="nano"

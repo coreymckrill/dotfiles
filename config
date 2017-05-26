@@ -1,0 +1,18 @@
+# !/bin/bash
+#
+# Usage in ~/.bashrc
+#
+# [[ -s ${HOME}/.local/config ]] && source ${HOME}/.local/config
+
+# Get root directory
+function local_dir {
+	echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+}
+
+# Includes
+source "$(local_dir)/functions"
+source "$(local_dir)/prompt"
+source "$(local_dir)/subversion"
+
+# Local additions/overrides
+[[ -s $(local_dir)/config_local ]] && source $(local_dir)/config_local

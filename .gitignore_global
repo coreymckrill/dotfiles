@@ -1,7 +1,16 @@
+# Usage
+#
+# [core]
+#	excludesfile = ~/.local/.gitignore_global
+
 .sass-cache
 .svn
 .DS_Store
+Thumbs.db
+wp-cli.local.yml
 .idea
 node_modules
 npm-debug.log
 *.map
+*.zip
+*.tar.gz

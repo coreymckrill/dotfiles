@@ -1,7 +1,11 @@
-# Include for ~/.gitconfig
+# Usage in ~/.gitconfig
+#
+# [include]
+#	path = ~/.local/.gitconfig
 
 [core]
 	excludesfile = ~/.local/.gitignore_global
+	editor = "atom --wait"
 
 [alias]
 	stat = status --short
