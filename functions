@@ -2,25 +2,37 @@
 
 # Apply a Trac patch.
 #
+# See http://scribu.net/wordpress/contributing-to-wordpress-using-github.html
+#
+# $1 - The URL of the patch.
+# $2 - Optional. Number of leading slashes in the prefix to strip. Default 0.
+# $3 - Optional. The VCS to use. 'svn' or 'git'. Default 'svn'.
 function tracpatch() {
+	local url=$1
+	local strip=${2:-0}
 	local vcs=${3:-"svn"}
+
+	if ! [[ $url =~ ^https://[^\.]+\.trac\.wordpress\.org ]]; then
+		echo 'The given URL is not for a valid Trac patch.'
+		return
+	fi
 
 	case "$vcs" in
 		svn)
-			curl "$1?format=raw" | patch -p${2:-0}
+			curl "${url}?format=raw" | patch -p${strip}
 			;;
 
 		git)
-			curl "$1?format=raw" | git apply -p${2:-0}
+			curl "${url}?format=raw" | git apply -p${strip}
 			;;
 	esac
 }
 
 # Prune unwanted lines from `svn stat` output.
 #
-# $1 - Optional. The raw `svn stat` output.
-#
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_aliases
+#
+# $1 - Optional. The raw `svn stat` output.
 function prune_svn_stat() {
 	# Allow for both function parameter and piping in.
 	# https://stackoverflow.com/a/35512655
