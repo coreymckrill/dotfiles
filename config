@@ -11,6 +11,7 @@ function local_dir {
 
 # Includes
 source "$(local_dir)/functions"
+source "$(local_dir)/aliases"
 source "$(local_dir)/prompt"
 source "$(local_dir)/subversion"
 
