@@ -6,12 +6,11 @@
 export CLICOLOR=1
 export LSCOLORS=exfxcxdxbxegedabagacad
 
-# See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_prompt
 color_reset="\[\033[m\]"
 color_dirty="\[\033[1;31m\]"       # red
-color_clean="\[\033[1;32m\]"       # green
-color_folder="\[\e[38;5;64m\]"     # lime green
-color_user="\[\e[38;5;19m\]"       # dark blue
+color_clean="\[\033[0;34m\]"       # blue
+color_folder="\[\033[0;32m\]"      # green
+color_user="\[\033[0;36m\]"        # cyan
 color_user_host="\[\e[38;5;166m\]" # orange
 
 # Includes
@@ -29,35 +28,32 @@ GIT_PS1_HIDE_IF_PWD_IGNORED=true
 # Determine SVN status of current location
 #
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_prompt
+#
+# Uses svn-stat-pruned alias
 function svn_status {
-	SVN_INFO=$(svn info 2> /dev/null)
+	local SVN_INFO=$(svn info 2> /dev/null)
+	local branch
+	local state
 
 	if [[ -z $SVN_INFO ]]; then
 		exit
 	fi
 
-	# Get the current branch
+	# Get the current branch.
 	branch=$(echo "$SVN_INFO" | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk' | egrep -o '[^/]+$')
 	if [[ -z $branch ]]; then
 		branch="trunk"
 	fi
 	branch="${color_branch}$branch${color_reset}"
 
-	# Determine if clean or dirty
-	# todo svn stat is the slowest part. any way to optimize this?
-	# maybe can cache some of it in env variables? prob not 'cause status can change so often, but worth considering
-	# search for other people's svn bash_prompt's and look at how they do it
-	# could also post question on stackoverflow for help
-	# todo this will report clean if an external is modified, which could lead to missed errors. too slow to include externals though? maybe just warn that it's only internal repo that's clean?
-	if [[ $(svn stat --ignore-externals | grep -v 'X       ' ) ]]; then
+	# Look for changes.
+	if [ ! -z "$(svn-stat-pruned)" ]; then
 		state="${color_dirty}dirty${color_reset}"
 	else
 		state="${color_clean}clean${color_reset}"
 	fi
 
-	# todo show whether repo is public or private? to help avoid accidentally commiting private to public
-
-	echo -n "SVN $branch is $state"
+	echo -n "SVN: [$branch is $state]"
 }
 
 # Generate SVN info to include in the prompt
