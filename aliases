@@ -5,3 +5,5 @@ alias dotfiles-refresh="source ~/.bash_profile"
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_aliases
 # and functions
 alias svn-stat-pruned="svn stat | prune_svn_stat"
+
+alias svnlog="svn log -l 5 ."
