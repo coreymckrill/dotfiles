@@ -1,5 +1,6 @@
 # !/bin/bash
 
+alias dotfiles="cd $DOTFILES_DIR"
 alias dotfiles-refresh="source ~/.bash_profile"
 
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_aliases

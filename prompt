@@ -14,7 +14,7 @@ color_user="\[\033[0;36m\]"        # cyan
 color_user_host="\[\e[38;5;166m\]" # orange
 
 # Includes
-[[ -s $(local_dir)/lib/git-prompt.sh ]] && source $(local_dir)/lib/git-prompt.sh
+[[ -s $DOTFILES_DIR/lib/git-prompt.sh ]] && source $DOTFILES_DIR/lib/git-prompt.sh
 
 # Git prompt settings
 #

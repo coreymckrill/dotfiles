@@ -1,11 +1,10 @@
 # Usage in ~/.gitconfig
 #
 # [include]
-#	path = ~/.local/.gitconfig
+#	path = ~/dotfiles/.gitconfig
 
 [core]
-	excludesfile = ~/.local/.gitignore_global
-	editor = "atom --wait"
+	excludesfile = ~/dotfiles/.gitignore_global
 
 [alias]
 	stat = status --short

@@ -1,7 +1,7 @@
 # Usage
 #
 # [core]
-#	excludesfile = ~/.local/.gitignore_global
+#	excludesfile = ~/dotfiles/.gitignore_global
 
 .sass-cache
 .svn

@@ -2,18 +2,18 @@
 #
 # Usage in ~/.bashrc
 #
-# [[ -s ${HOME}/.local/config ]] && source ${HOME}/.local/config
+# [[ -s ${HOME}/dotfiles/config ]] && source ${HOME}/dotfiles/config
 
-# Get root directory
-function local_dir {
-	echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-}
+DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Includes
-source "$(local_dir)/functions"
-source "$(local_dir)/aliases"
-source "$(local_dir)/prompt"
-source "$(local_dir)/subversion"
+source "$DOTFILES_DIR/functions"
+source "$DOTFILES_DIR/aliases"
+source "$DOTFILES_DIR/prompt"
+
+# Miscellaneous
+export EDITOR="nano"
+export SVN_EDITOR="nano -w"
 
 # Local additions/overrides
-[[ -s $(local_dir)/config_local ]] && source $(local_dir)/config_local
+[[ -s $DOTFILES_DIR/config_local ]] && source $DOTFILES_DIR/config_local
