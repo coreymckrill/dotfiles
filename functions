@@ -25,6 +25,9 @@ function tracpatch() {
 		git)
 			curl "${url}?format=raw" | git apply -p${strip}
 			;;
+		* )
+			echo "$vcs is not a valid value for the VCS parameter."
+			;;
 	esac
 }
 
