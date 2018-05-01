@@ -18,12 +18,12 @@ GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=true
 GIT_PS1_HIDE_IF_PWD_IGNORED=true
 
-# Determine SVN status of current location
+# Determine SVN state of current location
 #
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_prompt
 #
 # Uses svn-stat-pruned alias
-function svn_status {
+function svn_state {
 	local esc=$1
 	local SVN_INFO=$(svn info 2> /dev/null)
 	local branch
@@ -47,15 +47,15 @@ function svn_status {
 		state="$(color blue $esc)clean$(color reset $esc)"
 	fi
 
-	echo -n "SVN: [$branch is $state]"
+	echo -en "$branch:$state"
 }
 
 # Generate SVN info to include in the prompt
 function svn_prompt {
-	SVN_PROMPT=$(svn_status esc)
+	SVN_PROMPT=$(svn_state esc)
 
 	if [[ -n $SVN_PROMPT ]]; then
-		echo "$SVN_PROMPT"
+		echo -e "\nSVN [$SVN_PROMPT]"
 	fi
 
 	echo ""
@@ -63,5 +63,5 @@ function svn_prompt {
 
 # Teh prompt
 export PROMPT_COMMAND='__git_ps1 "\n$(color green esc)\w$(color reset esc)" \
-	"\n$(svn_prompt)\n$(color cyan esc)\u$(color reset esc)@$(color orange esc)\H$(color reset esc) > " \
-	"\nGit: [%s]"'
+	"$(svn_prompt)\n$(color cyan esc)\u$(color reset esc)@$(color orange esc)\H$(color reset esc) > " \
+	"\nGit [%s]"'
