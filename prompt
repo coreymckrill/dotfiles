@@ -22,7 +22,7 @@ GIT_PS1_HIDE_IF_PWD_IGNORED=true
 #
 # See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_prompt
 #
-# Uses svn-stat-pruned alias
+# Uses svnstat alias
 function svn_state {
 	local esc=$1
 	local SVN_INFO=$(svn info 2> /dev/null)
@@ -41,7 +41,7 @@ function svn_state {
 	branch="$(color purple $esc)${branch}$(color reset $esc)"
 
 	# Look for changes.
-	if [ ! -z "$(svn-stat-pruned)" ]; then
+	if [ ! -z "$(svnstat)" ]; then
 		state="$(color red $esc)dirty$(color reset $esc)"
 	else
 		state="$(color blue $esc)clean$(color reset $esc)"
