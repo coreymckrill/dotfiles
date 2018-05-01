@@ -1,5 +1,32 @@
 # !/bin/bash
 
+# Generate an ANSI color code.
+#
+# $1 - The name of the color.
+# $2 - Optional. Any non-null value. Whether to escape the code with \[ and \].
+function color() {
+	local color=$1
+	local escape=$2
+	local code=""
+
+	case "$color" in
+		green)  code="\033[0;32m" ;;
+		blue)   code="\033[0;34m" ;;
+		purple) code="\033[0;35m" ;;
+		cyan)   code="\033[0;36m" ;;
+		red)    code="\033[1;31m" ;;
+		orange) code="\e[38;5;166m" ;;
+
+		none | reset | * ) code="\033[m" ;;
+	esac
+
+	if [ ! -z $escape ]; then
+		code="\[${code}\]"
+	fi
+
+	echo $code
+}
+
 # Apply a Trac patch.
 #
 # See http://scribu.net/wordpress/contributing-to-wordpress-using-github.html

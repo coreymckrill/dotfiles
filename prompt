@@ -6,14 +6,6 @@
 export CLICOLOR=1
 export LSCOLORS=exfxcxdxbxegedabagacad
 
-color_reset="\033[m"
-color_branch="\033[0;35m"      # purple
-color_dirty="\033[1;31m"       # red
-color_clean="\033[0;34m"       # blue
-color_folder="\033[0;32m"      # green
-color_user="\033[0;36m"        # cyan
-color_user_host="\e[38;5;166m" # orange
-
 # Includes
 [[ -s $DOTFILES_DIR/lib/git-prompt.sh ]] && source $DOTFILES_DIR/lib/git-prompt.sh
 
@@ -32,6 +24,7 @@ GIT_PS1_HIDE_IF_PWD_IGNORED=true
 #
 # Uses svn-stat-pruned alias
 function svn_status {
+	local esc=$1
 	local SVN_INFO=$(svn info 2> /dev/null)
 	local branch
 	local state
@@ -45,13 +38,13 @@ function svn_status {
 	if [[ -z $branch ]]; then
 		branch="trunk"
 	fi
-	branch="${color_branch}${branch}${color_reset}"
+	branch="$(color purple $esc)${branch}$(color reset $esc)"
 
 	# Look for changes.
 	if [ ! -z "$(svn-stat-pruned)" ]; then
-		state="${color_dirty}dirty${color_reset}"
+		state="$(color red $esc)dirty$(color reset $esc)"
 	else
-		state="${color_clean}clean${color_reset}"
+		state="$(color blue $esc)clean$(color reset $esc)"
 	fi
 
 	echo -n "SVN: [$branch is $state]"
@@ -59,16 +52,16 @@ function svn_status {
 
 # Generate SVN info to include in the prompt
 function svn_prompt {
-	SVN_PROMPT=$(svn_status)
+	SVN_PROMPT=$(svn_status esc)
 
 	if [[ -n $SVN_PROMPT ]]; then
-		echo "\n$SVN_PROMPT"
+		echo "$SVN_PROMPT"
 	fi
 
 	echo ""
 }
 
 # Teh prompt
-export PROMPT_COMMAND='__git_ps1 "\n${color_folder}\w${color_reset}" \
-	"$(svn_prompt)\n${color_user}\u${color_reset}@${color_user_host}\H${color_reset} > " \
+export PROMPT_COMMAND='__git_ps1 "\n$(color green esc)\w$(color reset esc)" \
+	"\n$(svn_prompt)\n$(color cyan esc)\u$(color reset esc)@$(color orange esc)\H$(color reset esc) > " \
 	"\nGit: [%s]"'
