@@ -27,6 +27,24 @@ function color() {
 	echo $code
 }
 
+# Prune unwanted lines from `svn stat` output.
+#
+# See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_aliases
+#
+# $1 - Optional. The raw `svn stat` output.
+function prune_svn_stat() {
+	# Allow for both function parameter and piping in.
+	# https://stackoverflow.com/a/35512655
+	local svn_stat=${1:-$(</dev/stdin)};
+
+	# Easier to manage rules when each is on a separate line.
+	svn_stat=$(grep -v 'X   ' <<< "$svn_stat")
+	svn_stat=$(grep -v 'Performing status on ex' <<< "$svn_stat")
+	svn_stat=$(grep -v -e '^$' <<< "$svn_stat")
+
+	echo "$svn_stat"
+}
+
 # Apply a Trac patch.
 #
 # See http://scribu.net/wordpress/contributing-to-wordpress-using-github.html
@@ -58,20 +76,28 @@ function tracpatch() {
 	esac
 }
 
-# Prune unwanted lines from `svn stat` output.
+# Delete .orig and .rej files created during a messy patch application.
 #
-# See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_aliases
-#
-# $1 - Optional. The raw `svn stat` output.
-function prune_svn_stat() {
-	# Allow for both function parameter and piping in.
-	# https://stackoverflow.com/a/35512655
-	local svn_stat=${1:-$(</dev/stdin)};
+function patchcleanup() {
+	local found
+	local delete
 
-	# Easier to manage rules when each is on a separate line.
-	svn_stat=$(grep -v 'X   ' <<< "$svn_stat")
-	svn_stat=$(grep -v 'Performing status on ex' <<< "$svn_stat")
-	svn_stat=$(grep -v -e '^$' <<< "$svn_stat")
+	found="$(find . \( -name \*.orig -o -name \*.rej \))"
 
-	echo "$svn_stat"
+	if [ -z "$found" ]; then
+		echo -e "\nNothing found to delete."
+	else
+		echo -e "\n$found\n"
+		read -p 'Delete files? [y/N] ' delete
+
+		case $delete in
+			y | yes )
+					find . \( -name \*.orig -o -name \*.rej \) -delete
+					echo 'Files deleted.'
+			;;
+			n | no | * )
+					echo 'Files retained.'
+			;;
+		esac
+	fi
 }
