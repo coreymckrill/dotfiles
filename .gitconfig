@@ -11,3 +11,7 @@
 
 [color]
 	ui = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
