@@ -45,38 +45,41 @@ function prune_svn_stat() {
 	echo "$svn_stat"
 }
 
-# Apply a Trac patch.
+# Determine the SVN 'state' of current location.
+# Branch name and `clean` or `dirty`.
 #
-# See http://scribu.net/wordpress/contributing-to-wordpress-using-github.html
+# See https://github.com/iandunn/dotfiles/blob/a45ac99d07edeb5394cba6ea863508b4fee53592/.bash_prompt
 #
-# $1 - The URL of the patch.
-# $2 - Optional. Number of leading slashes in the prefix to strip. Default 0.
-# $3 - Optional. The VCS to use. 'svn' or 'git'. Default 'svn'.
-function tracpatch() {
-	local url=$1
-	local strip=${2:-0}
-	local vcs=${3:-"svn"}
+# Uses color()
+# Uses svnstat alias
+function svn_state {
+	local esc=$1
+	local SVN_INFO=$(svn info 2> /dev/null)
+	local branch
+	local state
 
-	if ! [[ $url =~ ^https://[^\.]+\.trac\.wordpress\.org ]]; then
-		echo 'The given URL is not for a valid Trac patch.'
-		return
+	if [[ -z $SVN_INFO ]]; then
+		exit
 	fi
 
-	case "$vcs" in
-		svn)
-			curl "${url}?format=raw" | patch -p${strip}
-			;;
+	# Get the current branch.
+	branch=$(echo "$SVN_INFO" | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk' | egrep -o '[^/]+$')
+	if [[ -z $branch ]]; then
+		branch="trunk"
+	fi
+	branch="$(color purple $esc)${branch}$(color reset $esc)"
 
-		git)
-			curl "${url}?format=raw" | git apply -p${strip}
-			;;
-		* )
-			echo "$vcs is not a valid value for the VCS parameter."
-			;;
-	esac
+	# Look for changes.
+	if [ ! -z "$(svnstat)" ]; then
+		state="$(color red $esc)dirty$(color reset $esc)"
+	else
+		state="$(color blue $esc)clean$(color reset $esc)"
+	fi
+
+	echo -en "$branch:$state"
 }
 
-# Delete .orig and .rej files created during a messy patch application.
+# Delete .orig and .rej files created during a messy SVN patch application.
 #
 function patchcleanup() {
 	local found
