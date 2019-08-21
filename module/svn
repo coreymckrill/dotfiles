@@ -1,0 +1,10 @@
+# !/bin/bash
+
+# Aliases
+
+# Remove a changelist.
+alias svnrmcl='svn changelist --remove --recursive --cl Default .'
+
+# Remove untracked files from the current directory and subdirectories.
+# Similar to git clean.
+alias svnclean="svnstat | grep '^?' | awk '{print $2}' | xargs rm -rfv"
