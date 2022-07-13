@@ -1,5 +1,14 @@
 # !/bin/bash
 
+# Load a file if it exists.
+#
+# $1 - The file with absolute path to maybe load.
+function maybe_load() {
+	local file=$1
+
+	[ -f $file ] && . $file
+}
+
 # Generate an ANSI color code.
 #
 # $1 - The name of the color.
